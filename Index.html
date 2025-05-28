@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desmaio: Compreendendo a Síncope</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Definindo a fonte Inter para todo o corpo */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Cores personalizadas para verde oliva e branco */
+        .bg-olive-light { background-color: #F8F8F8; } /* Um branco levemente acinzentado */
+        .text-olive-dark { color: #556B2F; } /* Verde oliva escuro */
+        .bg-olive-dark { background-color: #556B2F; } /* Verde oliva escuro */
+        .border-olive { border-color: #556B2F; } /* Borda verde oliva */
+
+        /* Estilo para garantir que o contêiner do slide ocupe a altura total disponível */
+        html, body, #app-container {
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="bg-olive-light text-gray-800 flex flex-col items-center justify-center min-h-screen p-4">
+    <div id="app-container" class="w-full max-w-2xl h-full flex flex-col justify-between items-center bg-white rounded-lg shadow-xl p-6 md:p-8 border-2 border-olive overflow-hidden">
+        <h1 id="main-title" class="text-3xl md:text-4xl font-bold text-olive-dark mb-4 text-center">Desmaio: Compreendendo a Síncope</h1>
+
+        <div id="slide-content" class="flex-grow w-full overflow-y-auto text-lg md:text-xl leading-relaxed text-center flex flex-col items-center p-4">
+            </div>
+
+        <div class="flex justify-between w-full mt-6">
+            <button id="prev-btn" class="bg-olive-dark text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-opacity-90 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-olive-dark focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed">
+                Anterior
+            </button>
+            <span id="page-indicator" class="text-olive-dark font-semibold text-lg md:text-xl flex items-center justify-center px-4"></span>
+            <button id="next-btn" class="bg-olive-dark text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-opacity-90 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-olive-dark focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed">
+                Próximo
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Array contendo o conteúdo de cada página do slide
+        const slides = [
+            `
+            <h2 class="text-2xl md:text-3xl font-semibold text-olive-dark mb-4">Página 1: Título e Introdução</h2>
+            <p class="mb-2">O desmaio, clinicamente conhecido como síncope, é a perda súbita e temporária da consciência, geralmente acompanhada de perda do tônus postural, que se recupera espontaneamente.</p>
+            <p class="mb-2">É um evento relativamente comum, mas que pode gerar preocupação e, em alguns casos, indicar uma condição médica subjacente mais séria.</p>
+            <p>Neste trabalho, exploraremos as causas, tipos, sintomas, primeiros socorros e medidas preventivas relacionadas ao desmaio.</p>
+            `,
+            `
+            <h2 class="text-2xl md:text-3xl font-semibold text-olive-dark mb-4">Página 2: Causas Comuns do Desmaio</h2>
+            <ul class="list-disc list-inside text-left mx-auto max-w-md">
+                <li>**Vasovagal (Desmaio Comum):** Reação exagerada a gatilhos (estresse, dor, medo), queda temporária da pressão e frequência cardíaca.</li>
+                <li>**Hipotensão Ortostática:** Queda de pressão ao levantar rapidamente (desidratação, medicamentos, envelhecimento).</li>
+                <li>**Problemas Cardíacos:** Arritmias, válvulas, ataques cardíacos, insuficiência.</li>
+                <li>**Outras Causas:** Hipoglicemia, anemia, convulsões, hiperventilação, desidratação.</li>
+            </ul>
+            `,
+            `
+            <h2 class="text-2xl md:text-3xl font-semibold text-olive-dark mb-4">Página 3: Tipos de Desmaio</h2>
+            <ul class="list-disc list-inside text-left mx-auto max-w-md">
+                <li>**Síncope Reflexa (Neuralmente Mediada):**
+                    <ul class="list-circle list-inside ml-4">
+                        <li>Vasovagal (emoções, dor, sangue).</li>
+                        <li>Situacional (tossir, urinar, engolir).</li>
+                        <li>Seio Carotídeo (pressão no pescoço).</li>
+                    </ul>
+                </li>
+                <li>**Síncope Ortostática:** Queda de pressão ao mudar de posição.</li>
+                <li>**Síncope Cardíaca:** Causada por problemas no coração (arritmias, doenças estruturais).</li>
+            </ul>
+            `,
+            `
+            <h2 class="text-2xl md:text-3xl font-semibold text-olive-dark mb-4">Página 4: Sintomas Precursores (Pródromos)</h2>
+            <ul class="list-disc list-inside text-left mx-auto max-w-md">
+                <li>Sensação de Tontura ou Vertigem.</li>
+                <li>Visão Turva ou "Escurecimento" da Visão.</li>
+                <li>Náuseas e Suores Frios.</li>
+                <li>Palidez.</li>
+                <li>Zumbido nos Ouvidos.</li>
+                <li>Sensação de Fraqueza ou Desfalecimento.</li>
+                <li>Batimentos Cardíacos Acelerados (Palpitações).</li>
+                <li>Dor de Cabeça.</li>
+            </ul>
+            `,
+            `
+            <h2 class="text-2xl md:text-3xl font-semibold text-olive-dark mb-4">Página 5: Primeiros Socorros (Durante o Desmaio)</h2>
+            <ul class="list-disc list-inside text-left mx-auto max-w-md">
+                <li>Mantenha a Calma.</li>
+                <li>Deite a Pessoa de costas.</li>
+                <li>Eleve as Pernas (30 cm acima do coração).</li>
+                <li>Afrouxe Roupas Apertadas.</li>
+                <li>Garanta Ventilação.</li>
+                <li>Não Tente Levantar a Pessoa Imediatamente.</li>
+                <li>Proteja a Cabeça.</li>
+            </ul>
+            `,
+            `
+            <h2 class="text-2xl md:text-3xl font-semibold text-olive-dark mb-4">Página 6: Primeiros Socorros (Após o Desmaio)</h2>
+            <ul class="list-disc list-inside text-left mx-auto max-w-md">
+                <li>Mantenha a Pessoa Deitada por alguns minutos.</li>
+                <li>Ofereça Líquidos (água ou bebida açucarada).</li>
+                <li>Observe a Recuperação.</li>
+                <li>Ajude a Levantar Lentamente.</li>
+                <li>Não Deixe a Pessoa Sozinha.</li>
+                <li>Busque Ajuda Médica se Necessário.</li>
+            </ul>
+            `,
+            `
+            <h2 class="text-2xl md:text-3xl font-semibold text-olive-dark mb-4">Página 7: Quando Procurar Ajuda Médica</h2>
+            <ul class="list-disc list-inside text-left mx-auto max-w-md">
+                <li>Desmaio sem Causa Aparente.</li>
+                <li>Desmaio Durante o Exercício Físico.</li>
+                <li>Desmaio Acompanhado de Dor no Peito, Palpitações ou Falta de Ar.</li>
+                <li>Desmaio em Idosos.</li>
+                <li>Desmaio com Lesões.</li>
+                <li>Desmaio com Perda de Controle da Bexiga ou Intestino.</li>
+                <li>Desmaios Recorrentes.</li>
+                <li>Histórico Familiar de Morte Súbita Cardíaca.</li>
+                <li>Gravidez.</li>
+                <li>Recuperação Lenta ou Confusão Prolongada.</li>
+            </ul>
+            `,
+            `
+            <h2 class="text-2xl md:text-3xl font-semibold text-olive-dark mb-4">Página 8: Prevenção do Desmaio</h2>
+            <ul class="list-disc list-inside text-left mx-auto max-w-md">
+                <li>Reconhecer e Evitar Gatilhos.</li>
+                <li>Hidratação Adequada.</li>
+                <li>Alimentação Regular.</li>
+                <li>Levantar-se Lentamente.</li>
+                <li>Evitar Ficar em Pé por Longos Períodos.</li>
+                <li>Usar Meias de Compressão.</li>
+                <li>Gerenciar o Estresse.</li>
+                <li>Revisar Medicamentos.</li>
+                <li>Tratar Condições Médicas Subjacentes.</li>
+            </ul>
+            `,
+            `
+            <h2 class="text-2xl md:text-3xl font-semibold text-olive-dark mb-4">Página 9: Mitos e Verdades sobre o Desmaio</h2>
+            <ul class="list-disc list-inside text-left mx-auto max-w-md">
+                <li>**Mito:** "Puxar a língua" ou "dar um tapa" ajuda. **Verdade:** Falso.</li>
+                <li>**Mito:** Desmaiar é sempre grave. **Verdade:** Falso (mas investigue).</li>
+                <li>**Mito:** Oferecer álcool ajuda. **Verdade:** Falso.</li>
+                <li>**Mito:** Desmaio e convulsão são o mesmo. **Verdade:** Falso.</li>
+                <li>**Mito:** Levantar imediatamente. **Verdade:** Falso.</li>
+            </ul>
+            `,
+            `
+            <h2 class="text-2xl md:text-3xl font-semibold text-olive-dark mb-4">Página 10: Conclusão e Referências</h2>
+            <p class="mb-2">O desmaio é um evento complexo com diversas causas. Compreender os sintomas e saber agir nos primeiros socorros é crucial.</p>
+            <p class="mb-2">A prevenção e a busca por avaliação médica, quando necessário, são fundamentais.</p>
+            <p class="font-semibold mt-4">Referências (Exemplos - Adicione suas próprias fontes):</p>
+            <ul class="list-disc list-inside text-left mx-auto max-w-md">
+                <li>Sociedade Brasileira de Cardiologia.</li>
+                <li>Artigos científicos sobre síncope.</li>
+                <li>Manuais de primeiros socorros.</li>
+                <li>Organização Mundial da Saúde (OMS).</li>
+            </ul>
+            `
+        ];
+
+        let currentPage = 0; // Começa na primeira página
+
+        const slideContent = document.getElementById('slide-content');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const pageIndicator = document.getElementById('page-indicator');
+
+        // Função para exibir o slide atual
+        function displaySlide() {
+            slideContent.innerHTML = slides[currentPage];
+            pageIndicator.textContent = `Página ${currentPage + 1} de ${slides.length}`;
+
+            // Habilita/desabilita botões de navegação
+            prevBtn.disabled = currentPage === 0;
+            nextBtn.disabled = currentPage === slides.length - 1;
+        }
+
+        // Event listeners para os botões de navegação
+        prevBtn.addEventListener('click', () => {
+            if (currentPage > 0) {
+                currentPage--;
+                displaySlide();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentPage < slides.length - 1) {
+                currentPage++;
+                displaySlide();
+            }
+        });
+
+        // Exibe o primeiro slide ao carregar a página
+        window.onload = displaySlide;
+    </script>
+</body>
+  </html>
